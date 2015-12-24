@@ -1,5 +1,5 @@
-# [Cropper](https://github.com/fengyuanchen/cropperjs)
+# Cropper.js
 
 > JavaScript image cropper.
 
-- [Demo](https://fengyuanchen.github.io/cropperjs)
+- [Homepage](http://fengyuanchen.github.io/cropperjs)
