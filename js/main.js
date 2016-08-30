@@ -22,6 +22,7 @@ window.onload = function () {
           // console.log(e.type);
         },
         cropstart: function (e) {
+          updateWeb();
           // console.log(e.type, e.detail.action);
         },
         cropmove: function (e) {
@@ -79,8 +80,8 @@ window.onload = function () {
           // console.log(e.type, e.detail.action);
         },
         crop: function (e) {
-          var data = e.detail;
           // console.log(e.type);
+          var data = e.detail;
           dataX.value = Math.round(data.x);
           dataY.value = Math.round(data.y);
           dataHeight.value = Math.round(data.height);

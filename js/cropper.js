@@ -1929,7 +1929,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    image.src = url;
-	    // console.log('self.viewBox',self.viewBox);
 	    $.appendChild(self.viewBox, image);
 	    self.image2 = image;
 	
@@ -1984,7 +1983,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	  },
 	  preview: function preview(initiator) {
-	  	console.log('preview() :: secondary?', typeof this.secondary);
 	    var self = this;
 	    var imageData = self.imageData;
 	    var canvasData = self.canvasData;
@@ -2110,6 +2108,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					$altCropperCropBox.style.opacity = 0.4;
 
 	      	self.preview(typeof self.secondary);		// UPDATE PREVIEW BOX ON CLICK
+	      	 $.dispatchEvent(element, EVENT_CROP, self.getData());
 
 	      });
 
