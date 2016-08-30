@@ -15,38 +15,112 @@ window.onload = function () {
   var dataScaleX = document.getElementById('dataScaleX');
   var dataScaleY = document.getElementById('dataScaleY');
   var options = {
-        aspectRatio: 16 / 9,
+        // aspectRatio: 16 / 9,
+        aspectRatio: 2.2 / 1,
         preview: '.img-preview',
         ready: function (e) {
-          console.log(e.type);
+          // console.log(e.type);
         },
         cropstart: function (e) {
-          console.log(e.type, e.detail.action);
+          // console.log(e.type, e.detail.action);
         },
         cropmove: function (e) {
-          console.log(e.type, e.detail.action);
+          // console.log(e.type, e.detail.action);
         },
         cropend: function (e) {
-          console.log(e.type, e.detail.action);
+          updateWeb();
+          // console.log(e.type, e.detail.action);
         },
         crop: function (e) {
           var data = e.detail;
-
-          console.log(e.type);
+          // console.log(e.type);
           dataX.value = Math.round(data.x);
           dataY.value = Math.round(data.y);
           dataHeight.value = Math.round(data.height);
           dataWidth.value = Math.round(data.width);
-          dataRotate.value = typeof data.rotate !== 'undefined' ? data.rotate : '';
-          dataScaleX.value = typeof data.scaleX !== 'undefined' ? data.scaleX : '';
-          dataScaleY.value = typeof data.scaleY !== 'undefined' ? data.scaleY : '';
+          // dataRotate.value = typeof data.rotate !== 'undefined' ? data.rotate : '';
+          // dataScaleX.value = typeof data.scaleX !== 'undefined' ? data.scaleX : '';
+          // dataScaleY.value = typeof data.scaleY !== 'undefined' ? data.scaleY : '';
         },
         zoom: function (e) {
           console.log(e.type, e.detail.ratio);
         }
+        ,autoCropArea: 0.432
       };
-  var cropper = new Cropper(image, options);
 
+  var cropper = new Cropper(image, options);
+  window.cropper = cropper;
+
+  var _Cropper = window.Cropper;
+  var _container = document.querySelector('.img-container');
+  var _download = document.getElementById('download');
+  var _actions = document.getElementById('actions');
+  var _dataX = document.getElementById('dataX');
+  var _dataY = document.getElementById('dataY');
+  var _dataHeight = document.getElementById('dataHeight');
+  var _dataWidth = document.getElementById('dataWidth');
+  var _dataRotate = document.getElementById('dataRotate');
+  var _dataScaleX = document.getElementById('dataScaleX');
+  var _dataScaleY = document.getElementById('dataScaleY');
+  var _options = {
+        aspectRatio: 1.915 / 1,
+        preview: '.img-preview',
+        ready: function (e) {
+          // console.log(e.type);
+        },
+        cropstart: function (e) {
+          // console.log(e.type, e.detail.action);
+        },
+        cropmove: function (e) {
+          // console.log(e.type, e.detail.action);
+        },
+        cropend: function (e) {
+          updateMobile();
+          // console.log(e.type, e.detail.action);
+        },
+        crop: function (e) {
+          var data = e.detail;
+          // console.log(e.type);
+          dataX.value = Math.round(data.x);
+          dataY.value = Math.round(data.y);
+          dataHeight.value = Math.round(data.height);
+          dataWidth.value = Math.round(data.width);
+          // dataRotate.value = typeof data.rotate !== 'undefined' ? data.rotate : '';
+          // dataScaleX.value = typeof data.scaleX !== 'undefined' ? data.scaleX : '';
+          // dataScaleY.value = typeof data.scaleY !== 'undefined' ? data.scaleY : '';
+        },
+        zoom: function (e) {
+          console.log(e.type, e.detail.ratio);
+        }
+        ,autoCropArea: 0.449
+      };
+  var _cropper = new Cropper(image, _options, true); // secondary = true
+  window._cropper = _cropper;
+
+  window.downloader = function(cropper, element, filename){
+    cropper.getCroppedCanvas().toBlob(function (blob){
+      element.download = filename + '.png';
+      element.href = window.URL.createObjectURL(blob);
+    });
+  }
+
+  window.updateWeb = function(){ downloader(cropper, document.querySelector('.download_web'), 'web'); }
+  window.updateMobile = function(){ downloader(_cropper, document.querySelector('.download_mobile'), 'mobile'); }
+
+  setTimeout(function(){
+
+    downloader(cropper, document.querySelector('.download_web'), 'web');
+    downloader(_cropper, document.querySelector('.download_mobile'), 'mobile');
+
+  }, 1000);
+
+  document.querySelector('.switch_web').addEventListener('click', function(e){
+    jQuery('.cropper-container.primary').click()
+  });
+
+  document.querySelector('.switch_mobile').addEventListener('click', function(e){
+    jQuery('.cropper-container.secondary').click()
+  });
 
   // Tooltip
   $('[data-toggle="tooltip"]').tooltip();

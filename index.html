@@ -19,8 +19,8 @@
   <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-  <!-- Header -->
-  <header class="navbar navbar-light navbar-static-top docs-header" id="top">
+  <!-- Header (HIDDEN) -->
+  <header style="display:none;" class="navbar navbar-light navbar-static-top docs-header" id="top">
     <div class="container">
       <nav>
         <div class="clearfix">
@@ -41,21 +41,8 @@
     </div>
   </header>
 
-  <!-- Jumbotron -->
-  <div class="jumbotron docs-jumbotron">
-    <div class="container">
-      <h1>Cropper.js <small class="version">v0.8.0</small></h1>
-      <p class="lead">JavaScript image cropper.</p>
-      <div class="docs-carbonads-container">
-        <div class="docs-carbonads">
-          <script id="_carbonads_js" src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=fengyuanchen" async></script>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Content -->
-  <div class="container">
+  <div class="container" style="margin-top:50px;" >
     <div class="row">
       <div class="col-md-9">
         <!-- <h3 class="page-header">Demo:</h3> -->
@@ -67,9 +54,12 @@
         <!-- <h3 class="page-header">Preview:</h3> -->
         <div class="docs-preview clearfix">
           <div class="img-preview preview-lg"></div>
+          <div class="img-preview preview-secondary"></div>
+          <!--
           <div class="img-preview preview-md"></div>
           <div class="img-preview preview-sm"></div>
           <div class="img-preview preview-xs"></div>
+          -->
         </div>
 
         <!-- <h3 class="page-header">Data:</h3> -->
@@ -94,6 +84,8 @@
             <input type="text" class="form-control" id="dataHeight" placeholder="height">
             <span class="input-group-addon">px</span>
           </div>
+
+          <!--
           <div class="input-group input-group-sm">
             <label class="input-group-addon" for="dataRotate">Rotate</label>
             <input type="text" class="form-control" id="dataRotate" placeholder="rotate">
@@ -107,10 +99,34 @@
             <label class="input-group-addon" for="dataScaleY">ScaleY</label>
             <input type="text" class="form-control" id="dataScaleY" placeholder="scaleY">
           </div>
+          -->
+          <a href="#" type="button" class="btn download_web">
+            <span class="fa fa-arrow-down"></span> Download Web Version
+          </a>
+
+          <a href="#" type="button" class="btn download_mobile" style="margin-top:10px;">
+            <span class="fa fa-arrow-down"></span> Download Mobile Version
+          </a>
+      
+
         </div>
       </div>
     </div>
-    <div class="row" id="actions">
+
+    <div class="row" id="switch" style="margin-left: 50px;">
+
+      <button type="button" class="btn switch_web" style="margin-top:10px;">
+        <span class="fa fa-arrow-down"></span> Switch to Web Crop Box
+      </button>
+
+      <button type="button" class="btn switch_mobile" style="margin-top:10px;">
+        <span class="fa fa-arrow-down"></span> Switch to Mobile Crop Box
+      </button>
+      
+    </div>
+
+    <!-- TEMPORARILY DISABLED -->
+    <div style="display:none;" class="row" id="actions">
       <div class="col-md-9 docs-buttons">
         <!-- <h3 class="page-header">Toolbar:</h3> -->
         <div class="btn-group">
@@ -518,10 +534,11 @@
 
       </div><!-- /.docs-toggles -->
     </div>
+
   </div>
 
   <!-- Footer -->
-  <footer class="docs-footer">
+  <footer style="display:none;" class="docs-footer">
     <div class="container">
       <p class="heart"></p>
       <ul class="list-inline links">

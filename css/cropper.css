@@ -259,3 +259,18 @@
 .cropper-disabled .cropper-point {
   cursor: not-allowed;
 }
+
+/* ADDITIONAL CSS */
+.secondary .cropper-point,
+.secondary .cropper-line {
+  background-color: magenta;
+}
+.secondary .cropper-view-box {
+  outline-color: magenta;
+}
+.cropper-container.primary .cropper-crop-box {
+  z-index: 10;
+}
+.cropper-container.secondary .cropper-crop-box {
+  z-index: 1;
+}

@@ -133,11 +133,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var AnotherCropper = void 0;
 	
 	var Cropper = function () {
-	  function Cropper(element, options) {
+	  function Cropper(element, options, secondary) {
 	    _classCallCheck(this, Cropper);
 	
 	    var self = this;
 	
+			self.secondary = secondary;
 	    self.element = element;
 	    self.options = $.extend({}, _defaults2.default, $.isPlainObject(options) && options);
 	    self.loaded = false;
@@ -166,7 +167,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var url = void 0;
 	
 	      if ($.getData(element, NAMESPACE)) {
-	        return;
+	      	// ENABLE SECOND INSTANCE?
+	        // return;
 	      }
 	
 	      $.setData(element, NAMESPACE, self);
@@ -184,10 +186,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        // e.g.: "http://example.com/img/picture.jpg"
 	        url = element.src;
+
 	      } else if (tagName === 'canvas' && window.HTMLCanvasElement) {
 	        url = element.toDataURL();
 	      }
-	
+
+	      // if ( typeof cINIT !== 'undefined' ) return;
 	      self.load(url);
 	    }
 	  }, {
@@ -301,6 +305,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        imageData.scaleY = scaleY;
 	      }
 	
+	      // if ( typeof cINIT !== "undefined" ) return 
 	      self.clone();
 	    }
 	  }, {
@@ -429,7 +434,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      $.addClass(element, CLASS_HIDDEN);
 	
 	      // Inserts the cropper after to the current image
-	      container.insertBefore(cropper, element.nextSibling);
+	      if ( self.secondary ){
+
+	      	var $imgContainer = document.querySelectorAll('.img-container')[0]
+	      	container.appendChild(cropper, $imgContainer);
+					cropper.classList.add('secondary');
+					cropper.style.position = 'absolute';
+					cropper.style.top = '0';
+					cropper.style.left = '14px';
+					cropper.style.pointerEvents = 'none';
+
+					var $cropperCropBox = cropper.querySelectorAll('.cropper-crop-box')[0];
+					$cropperCropBox.style.pointerEvents = 'auto';
+
+	      } else {
+
+	      	cropper.classList.add('primary');
+			    container.insertBefore(cropper, element.nextSibling);
+
+	      }
 	
 	      // Show the image if is hidden
 	      if (!self.isImg) {
@@ -730,8 +753,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $.addClass(element, 'cropper-hidden');
 	    $.removeClass(cropper, 'cropper-hidden');
 	  },
-	
-	
 	  // Canvas (image wrapper)
 	  initCanvas: function initCanvas() {
 	    var self = this;
@@ -953,6 +974,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 	  renderImage: function renderImage(changed) {
+
 	    var self = this;
 	    var canvasData = self.canvasData;
 	    var imageData = self.imageData;
@@ -1144,6 +1166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 	  output: function output() {
+
 	    var self = this;
 	
 	    self.preview();
@@ -1906,6 +1929,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    image.src = url;
+	    // console.log('self.viewBox',self.viewBox);
 	    $.appendChild(self.viewBox, image);
 	    self.image2 = image;
 	
@@ -1959,7 +1983,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      $.removeData(element, DATA_PREVIEW);
 	    });
 	  },
-	  preview: function preview() {
+	  preview: function preview(initiator) {
+	  	console.log('preview() :: secondary?', typeof this.secondary);
 	    var self = this;
 	    var imageData = self.imageData;
 	    var canvasData = self.canvasData;
@@ -2060,6 +2085,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    if ($.isFunction(options.cropstart)) {
 	      $.addListener(element, EVENT_CROP_START, options.cropstart);
+
+	      $.addListener( cropper, 'click', function(e){
+
+	      	var $cropperCropBox;
+	      	var $altCropperCropBox;
+
+	      	if ( typeof self.secondary == 'undefined' ){
+	
+		      	$cropperCropBox = document.querySelector('.cropper-container.primary .cropper-crop-box');
+		      	$altCropperCropBox = document.querySelector('.cropper-container.secondary .cropper-crop-box');
+
+	      	} else {
+
+		      	$cropperCropBox = document.querySelector('.cropper-container.secondary .cropper-crop-box');
+		      	$altCropperCropBox = document.querySelector('.cropper-container.primary .cropper-crop-box');
+
+	      	}
+
+					$cropperCropBox.style.zIndex    = 10;
+					$altCropperCropBox.style.zIndex = 1;
+
+					$cropperCropBox.style.opacity = 0.9
+					$altCropperCropBox.style.opacity = 0.4;
+
+	      	self.preview(typeof self.secondary);		// UPDATE PREVIEW BOX ON CLICK
+
+	      });
+
 	    }
 	
 	    if ($.isFunction(options.cropmove)) {
@@ -2078,6 +2131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      $.addListener(element, EVENT_ZOOM, options.zoom);
 	    }
 	
+			//
 	    $.addListener(cropper, EVENT_MOUSE_DOWN, self.onCropStart = $.proxy(self.cropStart, self));
 	
 	    if (options.zoomable && options.zoomOnWheel) {
@@ -2088,6 +2142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      $.addListener(cropper, EVENT_DBLCLICK, self.onDblclick = $.proxy(self.dblclick, self));
 	    }
 	
+			//
 	    $.addListener(document, EVENT_MOUSE_MOVE, self.onCropMove = $.proxy(self.cropMove, self));
 	    $.addListener(document, EVENT_MOUSE_UP, self.onCropEnd = $.proxy(self.cropEnd, self));
 	
@@ -2290,7 +2345,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  },
-	  cropMove: function cropMove(event) {
+	  cropMove: function cropMove(event) { 
 	    var self = this;
 	    var options = self.options;
 	    var e = $.getEvent(event);
@@ -2303,7 +2358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return;
 	    }
 	
-	    if (touches) {
+	    if (touches) { 
 	      touchesLength = touches.length;
 	
 	      if (touchesLength > 1) {
@@ -2801,7 +2856,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	exports.default = {
 	  // Show the crop box manually
-	  crop: function crop() {
+	  crop: function crop() { 
 	    var self = this;
 	
 	    if (self.ready && !self.disabled) {
